@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo&display=swap');
+
+:root{
+    --var-font:"Cairo",sans-serif;
+}
+
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+img.bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+
+form.container {
+    width: 400px;
+    z-index: 999;
+    padding: 1rem 2.2rem;
+    padding-bottom: 2.4rem;
+    border-radius: 20%;
+    height: auto;
+    backdrop-filter: blur(40px);
+    background-color: #ffffff20;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-family: var(--var-font);
+}
+
+.container h1 {
+    text-align: center;
+    color: #fff;
+}
+
+.container .image-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    height: 70px;
+    overflow: hidden;
+}
+
+.image-form img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+.image-form > button {
+    position: absolute;
+    left: 55%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    color: #fff;
+    background-color: orange;
+    border: none;
+    outline: none;
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.in {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    direction: rtl;
+    height: auto;
+}
+
+.in > p {
+    font-size: 15px;
+    color: #cfcfcf;
+    font-weight: bold;
+}
+
+.in input {
+    border: none;
+    outline: none;
+    height: 45px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    position: relative;
+    backdrop-filter: blur(12px);
+    background-color: #00000010;
+    padding: 4px 12px;
+    color: #fff;
+}
+
+.btns {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btns > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+
+.btns > button {
+    color: #fff;
+    background-color: #3AC435;
+    border: none;
+    outline: none;
+    width: 100px;
+    cursor: pointer;
+    height: 45px;
+    border-radius: 8px;
+    font-family: var(--var-font);
+}
+
+
+
+
+@media (max-width:400px){
+    form.container {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        justify-content: center;
+    }
+}

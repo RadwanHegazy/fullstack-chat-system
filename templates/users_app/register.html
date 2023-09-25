@@ -1,0 +1,47 @@
+{% extends 'users_app/base.html' %}
+{% load static %}
+
+{% block title %}
+انشاء حساب
+{% endblock %}
+
+
+
+{% block content %}
+
+        <h1>انشاء حساب</h1>
+        <div class="image-form">
+            <input type="file" hidden id="img" name="img">
+            <img src="{% static 'images/default-user.png' %}" alt="">
+            <button type="button" class="fas fa-edit"></button>
+        </div>
+
+        <div class="in">
+            <p>اسمك بالكامل</p>
+            <input type="text" name="full_name">
+        </div>
+
+        <div class="in">
+            <p>البريد الالكتروني</p>
+            <input type="email" name="email">
+        </div>
+
+        <div class="in">
+            <p>كلمة المرور</p>
+            <input type="password" name="password">
+        </div>
+
+        <div class="btns">
+            <div>
+                <p>لديك حساب بالفعل ؟</p>
+                <a href="{% url 'login' %}">تسجيل الدخول</a>
+            </div>
+            
+            <button type="submit">نسجيل</button>
+        </div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/change-image.js' %}"></script>
+{% endblock %}

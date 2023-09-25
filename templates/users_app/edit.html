@@ -1,0 +1,43 @@
+{% extends 'users_app/base.html' %}
+{% load static %}
+
+{% block title %}
+نعديل حساب
+{% endblock %}
+
+
+
+{% block content %}
+
+        <h1>نعديل حساب</h1>
+        <div class="image-form">
+            <input type="file" hidden id="img" name="img">
+            <img src="{{user.picture.url}}" alt="">
+            <button type="button" class="fas fa-edit"></button>
+        </div>
+
+        <div class="in">
+            <p>اسمك بالكامل</p>
+            <input type="text" name="full_name" value="{{user.full_name}}">
+        </div>
+
+        <div class="in">
+            <p>البريد الالكتروني</p>
+            <input type="email" name="email" value="{{user.email}}">
+        </div>
+
+        
+
+        <div class="btns">
+            <div>
+                <a href="{% url 'home' %}">الرئيسية</a>
+            </div>
+            
+            <button type="submit">حفظ</button>
+        </div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/change-image.js' %}"></script>
+{% endblock %}

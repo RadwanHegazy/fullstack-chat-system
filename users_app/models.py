@@ -29,6 +29,30 @@ class User (AbstractUser):
 
     def __str__(self):
         return self.full_name
+    
+    def login (**kwargs) : 
+        email = kwargs['email']
+        password = kwargs['password']
+
+        user = User.objects.filter(email=email)
+        
+        response = {
+            'errors':''
+        }
+
+        if not user.exists() or user.count() > 1 :
+            response['errors'] = 'خطأ في البريد الالكتروني'
+            return response
+        
+        user = user.first()
+
+        if not user.check_password(password) :
+            response['errors'] = 'خطأ في كلمة السر'
+            return response
+        
+        response['user'] = user
+
+        return response
 
 @receiver(post_save, sender = User)
 def GenreateHashKey (created, instance, **kwargs) :

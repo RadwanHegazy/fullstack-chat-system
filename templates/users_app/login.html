@@ -1,0 +1,33 @@
+{% extends 'users_app/base.html' %}
+{% load static %}
+
+{% block title %}
+تسجيل الدخول
+{% endblock %}
+
+
+
+{% block content %}
+
+        <h1>تسجيل الدخول</h1>
+
+        <div class="in">
+            <p>البريد الالكتروني</p>
+            <input type="email" name="email">
+        </div>
+
+        <div class="in">
+            <p>كلمة المرور</p>
+            <input type="password" name="password">
+        </div>
+
+        <div class="btns">
+            <div>
+                <p>ليس لديك حساب ؟</p>
+                <a href="{% url 'register' %}">انشاء حساب</a>
+            </div>
+            
+            <button type="submit">نسجيل</button>
+        </div>
+
+{% endblock %}
