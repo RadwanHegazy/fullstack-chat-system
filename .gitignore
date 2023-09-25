@@ -1,4 +1,6 @@
 __pycache__
 *.sqlite3
 users-images
+chat-images
+chat-audio
 migrations
