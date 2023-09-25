@@ -1,0 +1,120 @@
+{% extends 'chat_app/base.html' %}
+{% load static %}
+
+{% block title %}
+Chat with friend
+{% endblock %}
+
+
+{% block content %}
+    
+        <div class="info">
+
+            <img src="images/default-user.png" alt="">
+            <p>Radwan Gaber</p>
+
+        </div>
+
+
+        <div class="chat">
+
+            <div class="box">
+                <img src="images/default-user.png" alt="">
+                <div class="msg">
+                    <small>29/3/2020 at 3 AM</small>
+                    <p>السلام عليكم و رحمة الله وبركاتة</p>
+                </div>
+            </div>
+
+            
+            <div class="box reciver">
+                <img src="images/default-user.png" alt="">
+                <div class="msg">
+                    <small>29/3/2020 at 3 AM</small>
+                    <p>وعليكم السلام ورحمة الله و بركاتة</p>
+                </div>
+            </div>
+            
+            <div class="box reciver">
+                <img src="images/default-user.png" alt="">
+                <div class="msg">
+                    <small>29/3/2020 at 3 AM</small>
+                    <img src="images/bg.png" alt="">
+                </div>
+            </div>
+
+    
+        </div>
+
+
+
+        <div class="send-form">
+            <input type="text" placeholder="ادخل رسالتك هنا" name="" id="">
+            <div class="btns">
+                <button type="button" id="send-msg" class="fas fa-paper-plane"></button>
+                <button type="button" id="voice-msg" class="fa fa-microphone"></button>
+                <button type="button" id="image-btn" class="fas fa-image"></button>
+                <input type="file" hidden id="img">
+            </div>
+
+        </div>
+
+
+        <div class="voice-layer">
+            <div id="close-voice" class="fas fa-close"></div>
+            <button id="start-record" onclick='SendVoiceMessage("URL");'>تسجيل</button>
+            <button id="stop-record">توقف</button>
+            <div class="list">
+            </div>
+        </div>
+
+
+{% endblock %}
+
+
+{% block js %}
+
+    <!-- send image message -->
+    <script>
+
+        var imgInupt = document.querySelector('#img');
+        var ChooseImageBtn = document.querySelector('#image-btn');
+
+        ChooseImageBtn.addEventListener('click',()=>{
+            imgInupt.click()
+        })
+
+        imgInupt.addEventListener('change',(e)=>{
+            console.log('Send Image To Friedn')
+
+            // Write Ajax Code here for send image msg
+        })
+
+    </script>
+
+
+    <!-- send voice msg -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="{% static 'js/send-voice.msg.js' %}"></script>
+   
+    <script>
+        
+        var VoiceLayer = document.querySelector('.voice-layer')
+        var closeVoiceLayer = document.querySelector('#close-voice');
+        var OpenVoiceLayer = document.querySelector('#voice-msg');
+
+        OpenVoiceLayer.addEventListener('click',()=>{
+            VoiceLayer.classList.add('view')
+        })
+        
+        closeVoiceLayer.addEventListener('click',()=>{
+            VoiceLayer.classList.remove('view')
+        })
+
+
+
+    </script>
+
+
+{% endblock %}
+

@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base_home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+    
+    <img src="{% static 'images/bg.png' %}" alt="" class="bg">
+
+
+
+    <!-- Notification System -->
+<!-- 
+    <div class="noti">
+        <i class="fas fa-close close"></i>
+        <img src="images/default-user.png"  alt="">
+        <a href="#">توجد رسالة جديدة من Radwan Gaber </a>
+    </div>
+    
+
+    <script>
+        document.querySelectorAll('.noti').forEach( item =>{
+            item.querySelector('i').addEventListener('click',()=>{
+                item.remove()
+            })
+        })
+    </script> -->
+
+
+    <div class="container">
+
+        <div class="up">
+            <img src="{{user.picture.url}}" alt="">
+            <div class="icons">
+                <a href="{% url 'home' %}" class="fas fa-home"></a>
+                <a href="{% url 'edit' %}" class="fas fa-edit"></a>
+                <a href="{% url 'search_users' %}" class="fas fa-users"></a>
+                <a href="{% url 'logout' %}" class="fas fa-sign-out"></a>
+            </div>
+        </div>
+
+        {% block content %}
+        {% endblock %}
+
+         
+    </div>
+
+
+    {% block js %}
+    {% endblock %}
+
+</body>
+</html>
