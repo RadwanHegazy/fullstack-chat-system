@@ -10,30 +10,32 @@
 
 
 
-    <div class="search">
-        <input type="text" placeholder="بحث عن صديق">
-        <button class="fas fa-search"></button>
-    </div>
+    <form method="GET" class="search">
+        <input type="text" placeholder="بحث عن صديق" name="s">
+        <button class="fas fa-search" type="submit"></button>
+    </form>
 
     
     <div class="users">
+
+
+        {% for chat in chats %}
         
-        <!-- <a class="user" href="#">
-            <img src="images/default-user.png" alt="">
-            <div class="status" id="<userid>"></div>
-            <div class="info">
-                <p class="name">Radwan Gaber</p>
-            </div>
-        </a>
+            {% for u in chat.users.all %}
+                {% if u != user  %}
+                    <a class="user" href="{% url 'chat' u.uuid %}">
+                        <img src="{{ u.picture.url }}" alt="">
+                        <div class="status {% if u.is_online %}online{% endif %}" id="{{u.id}}"></div>
+                        <div class="info">
+                            <p class="name">{{ u.full_name }}</p>
+                            <p class="last-msg">{{ chat.last_msg }}</p>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
         
-        <a class="user" href="#">
-            <img src="images/default-user.png" alt="">
-            <div class="status online" id="<userid>"></div>
-            <div class="info">
-                <p class="name">Radwan Gaber</p>
-                <p class="last-msg">Radawn Gaber : How Are You</p>
-            </div>
-        </a> -->
+        {% endfor %}
+
 
 
     </div>

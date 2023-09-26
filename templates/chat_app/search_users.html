@@ -10,31 +10,25 @@
 
 
 
-    <div class="search">
-        <input type="text" placeholder="بحث عن مستخدم">
-        <button class="fas fa-search"></button>
-    </div>
+    <form method="GET" class="search">
+        <input type="text" placeholder="بحث عن مستخدم" name="s">
+        <button class="fas fa-search" type="submit"></button>
+    </form>
 
     
     <div class="users">
         
-        <!-- <a class="user" href="#">
-            <img src="images/default-user.png" alt="">
-            <div class="status" id="<userid>"></div>
-            <div class="info">
-                <p class="name">Radwan Gaber</p>
-            </div>
-        </a>
         
-        <a class="user" href="#">
-            <img src="images/default-user.png" alt="">
-            <div class="status online" id="<userid>"></div>
-            <div class="info">
-                <p class="name">Radwan Gaber</p>
-                <p class="last-msg">Radawn Gaber : How Are You</p>
-            </div>
-        </a> -->
-
+        {% for u in users %}
+                <a class="user" href="#">
+                    <img src="{{ u.picture.url }}" alt="">
+                    <div class="status {% if u.is_online %}online{% endif %}" id="{{u.id}}"></div>
+                    <div class="info">
+                        <p class="name">{{ u.full_name }}</p>
+                    </div>
+                </a>
+        {% endfor %}
+    
 
     </div>
 
