@@ -3,6 +3,9 @@ from users_app.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import uuid
+from .secure.encrypt import Encrypt
+from .secure.decrypt import Decrypt
+
 
 class Chat (models.Model) :
     users = models.ManyToManyField(User)
@@ -28,7 +31,8 @@ class Message (models.Model):
     def __str__(self) : 
         return str(self.chat)
     
-
+    def get_dec(self) : 
+        return Decrypt(encripted_word=self.text,hash_key=self.sender.user_hash_key)
 
 @receiver(post_save, sender = Chat)
 def CreateChatUUid(created, instance, **kwargs) :
@@ -43,6 +47,11 @@ def UpdateLastMessage(created, instance, **kwargs) :
 
         if instance.text :
             msg = f'{instance.sender} : {instance.text}'
+        
+            enc_word = Encrypt(sender=instance.sender,text=instance.text)
+            instance.text = enc_word
+            instance.save()
+            
         else : 
             msg = f'{instance.sender} : Media'
         
