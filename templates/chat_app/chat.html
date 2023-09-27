@@ -85,7 +85,7 @@ Chat with friend
 
 
         <div class="send-form">
-            <input type="text" placeholder="ادخل رسالتك هنا" name="" id="">
+            <input type="text" placeholder="ادخل رسالتك هنا" name="" id="text-msg-input">
             <div class="btns">
                 <button type="button" id="send-msg" class="fas fa-paper-plane"></button>
                 <button type="button" id="voice-msg" class="fa fa-microphone"></button>
@@ -110,6 +110,99 @@ Chat with friend
 
 {% block js %}
 
+
+
+    <script>
+        
+
+        const socket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/{{chat.uuid}}/'
+        );
+
+
+        socket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+
+            var current_user_pic = "{{user.picture.url}}";
+            var current_friend_pic = "{{friend.picture.url}}";
+
+            var sender = data.sender;
+            var message = data.message;
+            var picture = data.picture;
+            var msg_id = data.id;
+            var date = data.date;
+
+            var MessagBox = document.createElement('div')
+            MessagBox.setAttribute('class','box')
+            MessagBox.setAttribute('id',`${msg_id}`)
+
+            var UserImg = document.createElement('img') 
+            UserImg.setAttribute('src',picture)
+
+            MessagBox.appendChild(UserImg)
+
+
+            var msg_small_box = document.createElement('div')
+            msg_small_box.setAttribute('class','msg')
+
+            var date_element = document.createElement('small');
+            date_element.textContent = date
+
+            msg_small_box.appendChild(
+                date_element    
+            )
+
+
+            var message_ele = document.createElement('p');
+            message_ele.textContent = message;
+
+            msg_small_box.appendChild(
+                message_ele
+            )
+
+            MessagBox.appendChild(
+                msg_small_box
+            )
+
+            
+            if (sender == "{{friend.full_name}}"){
+                MessagBox.classList.add('reciver')
+            }
+
+
+            var chat_messages = document.querySelector('.chat');
+            chat_messages.appendChild(MessagBox)
+
+
+            window.location.href = `#${msg_id}`;
+            
+        };
+
+        var SendTextMessageBtn = document.getElementById('send-msg');
+        var TextMessage = document.getElementById('text-msg-input')
+
+        SendTextMessageBtn.addEventListener('click',()=>{
+            var msg = TextMessage.value;
+            
+            socket.send(JSON.stringify({
+                'message': msg
+            }));
+            
+            TextMessage.value = '';
+            TextMessage.focus()
+
+        })
+
+        document.getElementById('text-msg-input').onkeyup = function(e) {
+            if (e.key === 'Enter') {  // enter, return
+                SendTextMessageBtn.click()
+            }
+        };
+
+
+    </script>
 
     <!-- return to the latest messaeg -->
     <script>

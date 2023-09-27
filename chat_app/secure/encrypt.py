@@ -15,7 +15,7 @@ def Encrypt (text, sender) :
             hash_key[ i ] = letter_code
             encripted_text += letter_code + ' '
 
-    sender.user_hash_key = hash_key
+    sender.user_hash_key = str(hash_key)
     sender.save()
     
     return encripted_text
