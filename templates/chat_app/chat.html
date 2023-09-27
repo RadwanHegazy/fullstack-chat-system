@@ -10,21 +10,57 @@ Chat with friend
     
         <div class="info">
 
-            <img src="images/default-user.png" alt="">
-            <p>Radwan Gaber</p>
+            <img src="{{friend.picture.url}}" alt="">
+            <p>{{friend.full_name}}</p>
+            
 
         </div>
 
 
         <div class="chat">
 
-            <div class="box">
-                <img src="images/default-user.png" alt="">
-                <div class="msg">
-                    <small>29/3/2020 at 3 AM</small>
-                    <p>السلام عليكم و رحمة الله وبركاتة</p>
-                </div>
-            </div>
+            {% for message in messages %}
+            
+                {% if message.sender == user %}
+
+                    <div class="box" id="{{message.id}}">
+                        <img src="{{message.sender.picture.url}}" alt="">
+                        <div class="msg">
+                            <small>{{message.date|timesince }}</small>
+                            {% if message.get_dec %}
+                                <p>{{message.get_dec}}</p>
+                            {% endif %}
+                            {% if message.image %}
+                                <img src="{{message.image.url}}" alt="">
+                            {% endif %}
+                            {% if message.audio %}
+                                <audio src="{{message.audio.url}}" controls></audio>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                {% else %}
+                    
+                <div class="box reciver" id="{{message.id}}">
+                        <img src="{{message.sender.picture.url}}" alt="">
+                        <div class="msg">
+                            <small>{{message.date|timesince }}</small>
+                            {% if message.get_dec %}
+                                <p>{{message.get_dec}}</p>
+                            {% endif %}
+                            {% if message.image %}
+                                <img src="{{message.image.url}}" alt="">
+                            {% endif %}
+                            {% if message.audio %}
+                                <audio src="{{message.audio.url}}" controls></audio>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                {% endif %}
+            
+            {% endfor %}
+            <!-- 
 
             
             <div class="box reciver">
@@ -41,7 +77,7 @@ Chat with friend
                     <small>29/3/2020 at 3 AM</small>
                     <img src="images/bg.png" alt="">
                 </div>
-            </div>
+            </div> -->
 
     
         </div>
@@ -73,6 +109,14 @@ Chat with friend
 
 
 {% block js %}
+
+
+    <!-- return to the latest messaeg -->
+    <script>
+        var boxes = document.querySelectorAll('.box')
+        var last_box_id = boxes[boxes.length - 1 ]
+        window.location.href = '#' + last_box_id.id
+    </script>
 
     <!-- send image message -->
     <script>

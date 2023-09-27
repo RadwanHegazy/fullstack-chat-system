@@ -20,7 +20,7 @@
         
         
         {% for u in users %}
-                <a class="user" href="#">
+                <a class="user" href="{% url 'create_chat' u.uuid %}">
                     <img src="{{ u.picture.url }}" alt="">
                     <div class="status {% if u.is_online %}online{% endif %}" id="{{u.id}}"></div>
                     <div class="info">

@@ -23,12 +23,14 @@
         
             {% for u in chat.users.all %}
                 {% if u != user  %}
-                    <a class="user" href="{% url 'chat' u.uuid %}">
+                    <a class="user" href="{% url 'chat' chat.uuid %}">
                         <img src="{{ u.picture.url }}" alt="">
                         <div class="status {% if u.is_online %}online{% endif %}" id="{{u.id}}"></div>
                         <div class="info">
                             <p class="name">{{ u.full_name }}</p>
-                            <p class="last-msg">{{ chat.last_msg }}</p>
+                            {% if chat.last_msg %}
+                                <p class="last-msg">{{ chat.last_msg }}</p>
+                            {% endif %}
                         </div>
                     </a>
                 {% endif %}
