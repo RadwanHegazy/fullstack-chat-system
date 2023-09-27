@@ -26,7 +26,7 @@ class Message (models.Model):
     sender = models.ForeignKey(User,on_delete=models.CASCADE)
     text = models.TextField(max_length=10000000,null=True,blank=True)
     image = models.ImageField(upload_to='chat-images',null=True,blank=True)
-    audio = models.ImageField(upload_to='chat-audio',null=True,blank=True)
+    audio = models.FileField(upload_to='chat-audio',null=True,blank=True)
 
     def __str__(self) : 
         return str(self.chat)
