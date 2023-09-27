@@ -28,6 +28,7 @@ def ChatView (request, chatuuid) :
 
     context['friend'] = chat.get_friend(user=request.user)
     context['messages'] = Message.objects.filter(chat=chat)
+    context['chat'] = chat
 
     return render(request,'chat_app/chat.html',context)
 
