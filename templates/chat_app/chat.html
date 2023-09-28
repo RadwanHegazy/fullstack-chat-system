@@ -12,7 +12,7 @@ Chat with friend
 
             <img src="{{friend.picture.url}}" alt="">
             <p>{{friend.full_name}}</p>
-            
+            <div class="status" id="{{friend.id}}"></div>
 
         </div>
 
@@ -27,14 +27,14 @@ Chat with friend
                         <img src="{{message.sender.picture.url}}" alt="">
                         <div class="msg">
                             <small>{{message.date|timesince }}</small>
-                            {% if message.get_dec %}
+                            {% if message.text %}
                                 <p>{{message.get_dec}}</p>
                             {% endif %}
                             {% if message.image %}
                                 <img src="{{message.image.url}}" alt="">
                             {% endif %}
                             {% if message.audio %}
-                                <audio src="{{message.audio.url}}" controls></audio>
+                                <audio controls src="{{message.audio.url}}" ></audio>
                             {% endif %}
                         </div>
                     </div>
@@ -45,14 +45,14 @@ Chat with friend
                         <img src="{{message.sender.picture.url}}" alt="">
                         <div class="msg">
                             <small>{{message.date|timesince }}</small>
-                            {% if message.get_dec %}
+                            {% if message.text %}
                                 <p>{{message.get_dec}}</p>
                             {% endif %}
                             {% if message.image %}
                                 <img src="{{message.image.url}}" alt="">
                             {% endif %}
                             {% if message.audio %}
-                                <audio src="{{message.audio.url}}" controls></audio>
+                                <audio controls src="{{message.audio.url}}" ></audio>
                             {% endif %}
                         </div>
                     </div>
@@ -60,31 +60,14 @@ Chat with friend
                 {% endif %}
             
             {% endfor %}
-            <!-- 
-
             
-            <div class="box reciver">
-                <img src="images/default-user.png" alt="">
-                <div class="msg">
-                    <small>29/3/2020 at 3 AM</small>
-                    <p>وعليكم السلام ورحمة الله و بركاتة</p>
-                </div>
-            </div>
-            
-            <div class="box reciver">
-                <img src="images/default-user.png" alt="">
-                <div class="msg">
-                    <small>29/3/2020 at 3 AM</small>
-                    <img src="images/bg.png" alt="">
-                </div>
-            </div> -->
-
     
         </div>
 
 
 
         <div class="send-form">
+            {% csrf_token %}
             <input type="text" placeholder="ادخل رسالتك هنا" name="" id="text-msg-input">
             <div class="btns">
                 <button type="button" id="send-msg" class="fas fa-paper-plane"></button>
@@ -98,7 +81,7 @@ Chat with friend
 
         <div class="voice-layer">
             <div id="close-voice" class="fas fa-close"></div>
-            <button id="start-record" onclick='SendVoiceMessage("URL");'>تسجيل</button>
+            <button id="start-record" >تسجيل</button>
             <button id="stop-record">توقف</button>
             <div class="list">
             </div>
@@ -112,6 +95,8 @@ Chat with friend
 
 
 
+    <script src="{% static 'js/moment.min.js' %}"></script>
+
     <script>
         
 
@@ -122,17 +107,48 @@ Chat with friend
         );
 
 
+        function CreateMessageBody (msg, img, audio) {
+
+            var body;
+            
+            if (msg){
+                body = document.createElement('p');
+                body.textContent = msg;
+            }
+            
+            else if (img) {
+                body = document.createElement('img');
+                body.src = img;
+            }
+            
+            else if (audio) {
+                body = document.createElement('audio');
+                body.setAttribute('controls','')
+                body.setAttribute('src',audio)
+            }
+
+
+
+            return body;
+        }
+
         socket.onmessage = function(e) {
             const data = JSON.parse(e.data);
 
             var current_user_pic = "{{user.picture.url}}";
             var current_friend_pic = "{{friend.picture.url}}";
 
+
             var sender = data.sender;
             var message = data.message;
             var picture = data.picture;
             var msg_id = data.id;
+            var image = data.image;
+            var audio = data.audio;
             var date = data.date;
+            var date = moment(date).startOf().fromNow();
+
+            console.log(image)
 
             var MessagBox = document.createElement('div')
             MessagBox.setAttribute('class','box')
@@ -155,8 +171,8 @@ Chat with friend
             )
 
 
-            var message_ele = document.createElement('p');
-            message_ele.textContent = message;
+            
+            var message_ele = CreateMessageBody(message,image, audio);
 
             msg_small_box.appendChild(
                 message_ele
@@ -212,6 +228,8 @@ Chat with friend
     </script>
 
     <!-- send image message -->
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script>
 
         var imgInupt = document.querySelector('#img');
@@ -222,7 +240,24 @@ Chat with friend
         })
 
         imgInupt.addEventListener('change',(e)=>{
-            console.log('Send Image To Friedn')
+
+            var form = new FormData()
+            
+            var img = e.target.files[0];
+            
+            var csrf = document.querySelector('.send-form input[name=csrfmiddlewaretoken]').value;
+
+            form.append('image',img)
+            form.append('csrfmiddlewaretoken',csrf)
+
+            $.ajax({
+                url:"{% url 'send_img' chat.uuid %}",
+                type:"POST",
+                data:form,
+                contentType:false,
+                processData:false,
+                cache:false,
+            })
 
             // Write Ajax Code here for send image msg
         })
@@ -231,8 +266,6 @@ Chat with friend
 
 
     <!-- send voice msg -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="{% static 'js/send-voice.msg.js' %}"></script>
    
     <script>
         
@@ -248,7 +281,120 @@ Chat with friend
             VoiceLayer.classList.remove('view')
         })
 
+        
+        
+        
+// record audio
+var rec_btn = document.getElementById('start-record');
+var stop_btn = document.getElementById('stop-record');
+var form = document.querySelector('.voice-msg');
+var list = document.querySelector('.voice-layer .list');
+let chunks = []
 
+
+
+var ajax_url = "{% url 'send_audio' chat.uuid %}";
+
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+
+    navigator.mediaDevices.getUserMedia({audio:true})
+    .then(function(stream){
+        const media_recorder = new MediaRecorder(stream);
+        
+        
+        
+        rec_btn.onclick = function(){
+            console.log(media_recorder.state)
+            media_recorder.start();
+            rec_btn.style.display = 'none';
+            stop_btn.style.display = 'block';
+        }
+        
+
+
+        media_recorder.ondataavailable  = function(e){
+            chunks.push(e.data)
+        }
+        
+        stop_btn.onclick = function(){
+            stop_btn.style.display = 'none';
+            rec_btn.style.display = 'block';
+            media_recorder.stop();
+            // document.getElementById('send-v').classList.add('view')
+            
+        }
+        
+        
+        media_recorder.onstop = function(e){
+            let audio = document.createElement('audio');
+            audio.setAttribute('controls','')
+            audio.setAttribute('name','voice')
+            let blob = new Blob(chunks,{ 'type' : 'audio/ogg; codecs=opus' });
+            
+            // ajax post
+            var Data = new FormData();
+            Data.append('audio',blob);
+            
+            
+
+
+
+
+            chunks = [];
+            let ad_url = window.URL.createObjectURL(blob);
+            audio.src = ad_url;
+            list.innerHTML = '';
+            
+            let SendRecBtn = document.createElement('button')
+            SendRecBtn.textContent = 'ارسال'
+            
+
+
+            list.append(audio);
+            list.append(SendRecBtn);
+            
+
+            SendRecBtn.addEventListener('click',()=>{
+                
+                var csrf = document.querySelector('.send-form input[name=csrfmiddlewaretoken]').value;
+                
+                Data.append('csrfmiddlewaretoken',csrf)
+
+                
+                $.ajax({
+                    url:ajax_url,
+                    type:"POST",
+                    data:Data,
+                    contentType:false,
+                    processData:false,
+                    cache:false,
+                })
+
+
+                document.querySelector('.voice-layer').classList.remove('view');
+            })
+            
+
+
+
+
+
+
+
+        }
+        
+    })
+
+    .catch(function(error){
+        console.log('error',error)
+    })
+    
+    
+    
+}else {
+    alert('There is an error with your browser')
+}
+    
 
     </script>
 

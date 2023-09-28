@@ -145,7 +145,7 @@ img.bg {
     border-radius: 50%;
 }
 
-.users .user .status {
+.status {
     position: absolute;
     width: 20px;
     height: 20px;
@@ -155,7 +155,7 @@ img.bg {
     bottom: 5px;
 }
 
-.users .user  .status.online {
+.status.online {
     background-color: #00FF11;
 }
 
@@ -166,6 +166,8 @@ img.bg {
     align-items: left;
     background-color: transparent;
 }
+
+
 
 .user .info .name {
     font-family: var(--var-font);
@@ -245,6 +247,7 @@ img.bg {
 
 
 .info {
+    position: relative;
     width: 100%;
     height: 55px;
     background-color: #ffffff10;
@@ -320,8 +323,7 @@ img.bg {
 }
 
 .chat .box .msg img, .chat .box .msg audio {
-    width: 100%;
-    height: auto;
+    max-width: 100%;
 }
 
 
