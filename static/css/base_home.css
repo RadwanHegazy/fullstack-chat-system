@@ -322,7 +322,11 @@ img.bg {
     background-color: #F7A30F47;
 }
 
-.chat .box .msg img, .chat .box .msg audio {
+.chat .box .msg img {
+    max-width: 100%;
+}
+
+.chat .box .msg audio{
     max-width: 100%;
 }
 
